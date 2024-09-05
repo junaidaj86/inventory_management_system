@@ -26,7 +26,7 @@ public class JwtService {
         final Claims claims=extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
-    public String generateToken(UserDetails userDetails, String tenantId){
+    public String generateToken(UserDetails userDetails, Long tenantId){
         Map<String, Object> claims = new HashMap<>();
         claims.put("roles", userDetails.getAuthorities()); // Add roles to the claims
         claims.put("tenantId", tenantId);
@@ -58,8 +58,8 @@ public boolean isTokenValid(String token, UserDetails userDetails){
 
     }
 
-    public String extractTenantId(String token) {
-        return extractClaim(token, claims -> claims.get("tenantId", String.class));
+    public Long extractTenantId(String token) {
+        return extractClaim(token, claims -> claims.get("tenantId", Long.class));
     }
     
 

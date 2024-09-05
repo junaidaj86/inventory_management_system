@@ -1,8 +1,6 @@
-package com.zinu.inventory.repository;
+package com.zinu.inventory.product;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import com.zinu.inventory.model.Barcode;
 
 public interface BarcodeRepository extends JpaRepository<Barcode, Long> {
 }

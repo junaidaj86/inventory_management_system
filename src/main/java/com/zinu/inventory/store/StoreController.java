@@ -18,21 +18,21 @@ public class StoreController {
     private final StoreService storeService;
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('SUPERADMIN')")
     public ResponseEntity<Store> createStore(@RequestBody Store store) {
         Store createdStore = storeService.createStore(store);
         return new ResponseEntity<>(createdStore, HttpStatus.CREATED);
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('SUPERADMIN') or hasRole('ADMIN')")
     public ResponseEntity<List<Store>> getStores() {
         List<Store> stores = storeService.getStores();
         return new ResponseEntity<>(stores, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('SUPERADMIN') or hasRole('ADMIN')")
     public ResponseEntity<Store> getStoreById(@PathVariable Long id) {
         Optional<Store> store = storeService.getStoreById(id);
         return store.map(ResponseEntity::ok)
@@ -40,7 +40,7 @@ public class StoreController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('SUPERADMIN') or hasRole('ADMIN')")
     public ResponseEntity<Store> updateStore(@PathVariable Long id, @RequestBody Store store) {
         try {
             Store updatedStore = storeService.updateStore(id, store);
@@ -51,7 +51,7 @@ public class StoreController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('SUPERADMIN')")
     public ResponseEntity<Void> deleteStore(@PathVariable Long id) {
         try {
             storeService.deleteStore(id);
@@ -62,21 +62,21 @@ public class StoreController {
     }
 
     @GetMapping("/name/{storeName}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('SUPERADMIN') or hasRole('ADMIN')")
     public ResponseEntity<List<Store>> getStoresByName(@PathVariable String storeName) {
         List<Store> stores = storeService.getStoresByName(storeName);
         return new ResponseEntity<>(stores, HttpStatus.OK);
     }
 
     @GetMapping("/register/{registerNumber}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('SUPERADMIN') or hasRole('ADMIN')")
     public ResponseEntity<List<Store>> getStoresByRegisterNumber(@PathVariable String registerNumber) {
         List<Store> stores = storeService.getStoresByRegisterNumber(registerNumber);
         return new ResponseEntity<>(stores, HttpStatus.OK);
     }
 
     @GetMapping("/count")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('SUPERADMIN')")
     public ResponseEntity<Long> countStores() {
         long count = storeService.countStores();
         return new ResponseEntity<>(count, HttpStatus.OK);

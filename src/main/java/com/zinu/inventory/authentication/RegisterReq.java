@@ -5,7 +5,7 @@ public record RegisterReq(
     String lastName,
     String email,
     String password,
-    String tenantId,
+    int tenantId,
     String role
 ) {
 }

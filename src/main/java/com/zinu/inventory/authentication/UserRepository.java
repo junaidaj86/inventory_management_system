@@ -1,9 +1,7 @@
-package com.zinu.inventory.repository;
+package com.zinu.inventory.authentication;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import com.zinu.inventory.authentication.Users;
 
 import java.util.Optional;
 

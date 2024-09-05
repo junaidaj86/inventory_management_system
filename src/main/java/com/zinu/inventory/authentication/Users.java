@@ -12,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zinu.inventory.store.Store;
 
 import java.util.Collection;
@@ -35,15 +36,17 @@ public class Users implements UserDetails {
     private String email;
     @Size(min = 6)
     //@Pattern(regexp = "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*$", message = "Password should be minimum of 6 and maximum of 12 length, One Alphabet, One UpperCase, One Special character, One digit from 0 to 9")
+    @JsonIgnore
     private String password; // pass
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private String tenantId;
+    private int tenantId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
+    @JsonIgnore
     private Store store;
 
     @Override

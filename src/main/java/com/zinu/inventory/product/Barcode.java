@@ -1,22 +1,17 @@
-package com.zinu.inventory.model;
-
-
+package com.zinu.inventory.product;
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
 @Entity
-public class Supplier {
+public class Barcode {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false)
-    private String contactInfo;
+   
+    private String code;
 
     private String tenantId;
 }

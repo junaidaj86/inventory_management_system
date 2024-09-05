@@ -2,6 +2,7 @@ package com.zinu.inventory.authentication;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,17 +19,17 @@ public class AuthController {
     private final AuthService service;
 
     @PostMapping("/register")
+    @PreAuthorize("hasRole('SUPERADMIN') or hasRole('ADMIN')")
     public ResponseEntity<AuthResponse> register(
-            @RequestBody RegisterReq request
-    ) throws MasterException {
-return ResponseEntity.ok(service.register(request));
+            @RequestBody RegisterReq request) throws MasterException {
+        return ResponseEntity.ok(service.register(request));
     }
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthResponse> authenticate(
-            @RequestBody AuthRequest request
-    ) throws MasterException {
-       
+            @RequestBody AuthRequest request) throws MasterException {
+
         return ResponseEntity.ok(service.authenticate(request));
     }
+
 }

@@ -5,14 +5,14 @@ import org.springframework.security.core.GrantedAuthority;
 import java.util.Collection;
 
 public class TenantedAuthenticationToken extends UsernamePasswordAuthenticationToken {
-    private final String tenantId;
+    private final Long tenantId;
 
-    public TenantedAuthenticationToken(Object principal, String tenantId, Object credentials, Collection<? extends GrantedAuthority> authorities) {
+    public TenantedAuthenticationToken(Object principal, Long tenantId, Object credentials, Collection<? extends GrantedAuthority> authorities) {
         super(principal, credentials, authorities);
         this.tenantId = tenantId;
     }
 
-    public String getTenantId() {
+    public Long getTenantId() {
         return tenantId;
     }
 }

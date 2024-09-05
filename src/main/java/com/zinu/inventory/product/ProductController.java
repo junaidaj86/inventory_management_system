@@ -7,24 +7,25 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.zinu.inventory.model.Product;
-import com.zinu.inventory.productSupplier.ProductService;
+import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping("/api/v1/product")
+@RequestMapping("/api/v1/products")
+@AllArgsConstructor
 public class ProductController {
 
-    @Autowired
-    private ProductService productService;
+    private final ProductService productService;
 
-     @PostMapping("/{supplierId}/products")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Product> addProduct(@PathVariable Long supplierId,
-                                                        @RequestBody Product product) {
-        Product createdProduct = productService.addProduct(supplierId, product);
+    @PostMapping
+    public ResponseEntity<Product> createProduct(
+            @RequestBody Product product,
+            @RequestParam Long supplierId
+    ) {
+        Product createdProduct = productService.createProduct(product, supplierId);
         return ResponseEntity.ok(createdProduct);
     }
-    
 }
+

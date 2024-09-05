@@ -1,4 +1,6 @@
-package com.zinu.inventory.model;
+package com.zinu.inventory.product;
+
+import com.zinu.inventory.supplier.Supplier;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -15,7 +17,7 @@ public class Product {
 
     private String description;
 
-    private String tenantId;
+    private Long tenantId;
 
     @Column(nullable = false)
     private double price;
@@ -24,7 +26,7 @@ public class Product {
     private int stockQuantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "supplier_id", nullable = false)
+    @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
