@@ -1,5 +1,7 @@
 package com.zinu.inventory.supplier;
 
+import java.util.List;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,10 @@ public class SupplierService {
         Long tenantId = getTenantId();
         supplier.setTenantId(tenantId);
         return supplierRepository.save(supplier);
+    }
+
+    public List<Supplier> getSupplier(){
+        return supplierRepository.findByTenantId(getTenantId());
     }
 }
 

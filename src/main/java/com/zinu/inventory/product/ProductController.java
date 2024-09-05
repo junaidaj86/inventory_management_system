@@ -22,9 +22,10 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<Product> createProduct(
             @RequestBody Product product,
-            @RequestParam Long supplierId
+            @RequestParam Long supplierId,
+            @RequestParam Long categoryId
     ) {
-        Product createdProduct = productService.createProduct(product, supplierId);
+        Product createdProduct = productService.createProduct(product, supplierId, categoryId);
         return ResponseEntity.ok(createdProduct);
     }
 }
