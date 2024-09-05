@@ -1,6 +1,7 @@
 package com.zinu.inventory.product;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zinu.inventory.category.Category;
 import com.zinu.inventory.supplier.Supplier;
 
@@ -29,10 +30,12 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supplier_id")
+    @JsonIgnore
     private Supplier supplier;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "barcode_id", referencedColumnName = "id")
+    @JsonIgnore
     private Barcode barcode;
 
     @ManyToOne

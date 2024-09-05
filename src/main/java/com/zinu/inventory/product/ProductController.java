@@ -3,6 +3,7 @@ package com.zinu.inventory.product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,13 +21,21 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(
+    public ResponseEntity<ProductDTO> createProduct(
             @RequestBody Product product,
             @RequestParam Long supplierId,
             @RequestParam Long categoryId
     ) {
-        Product createdProduct = productService.createProduct(product, supplierId, categoryId);
+        ProductDTO createdProduct = productService.createProduct(product, supplierId, categoryId);
         return ResponseEntity.ok(createdProduct);
+    }
+
+    @GetMapping("/scan/{barcodeText}")
+    public ResponseEntity<Product> getProductByBarcodeAndTenant(
+            @PathVariable String barcodeText) {
+
+        Product product = productService.findProductByBarcodeAndTenant(barcodeText);
+        return ResponseEntity.ok(product);
     }
 }
 
