@@ -1,6 +1,7 @@
 package com.zinu.inventory.product;
 
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -81,4 +82,8 @@ public class ProductService {
     //     MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
     //     return barcodeFileName; // Return the path to the barcode image
     // }
+
+    public List<Product> searchProductByName(String name) {
+        return productRepository.findByNameContainingIgnoreCase(name);
+    }
 }

@@ -11,5 +11,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByTenantId(Long tenantId);
      // Find a product by barcode and tenantId
     Optional<Product> findByBarcodeAndTenantId(Barcode barcode, Long tenantId);
+    List<Product> findByNameContainingIgnoreCase(String name);
 }
 

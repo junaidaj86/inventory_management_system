@@ -20,7 +20,7 @@ public class InventoryApplication {
 	@Bean
     CommandLineRunner init(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         return args -> {
-            if (!userRepository.findByEmail("superadmin@example.com").isPresent()) {
+            if (!userRepository.findByEmail("junaid@gmail.com").isPresent()) {
 				Role role = Role.valueOf("ROLE_SUPERADMIN");
                 Users superAdmin = Users.builder()
                     .firstName("Super")

@@ -1,5 +1,7 @@
 package com.zinu.inventory.product;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,6 +38,12 @@ public class ProductController {
 
         Product product = productService.findProductByBarcodeAndTenant(barcodeText);
         return ResponseEntity.ok(product);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Product>> searchProductByName(@RequestParam String name) {
+        List<Product> products = productService.searchProductByName(name);
+        return ResponseEntity.ok(products);
     }
 }
 
