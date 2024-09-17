@@ -43,28 +43,37 @@ public class BillService {
     }
 
     @Transactional
-    public Bill addItemToBill(Long billId, BilledItem item) {
+    public Bill addItemsToBill(Long billId, List<BilledItem> items) {
+        // Find the bill by its ID
         Bill bill = billRepository.findById(billId)
                 .orElseThrow(() -> new ResourceNotFoundException("Bill not found with id: " + billId));
-
-        // Fetch product to check stock
-        Product product = productRepository.findById(item.getProduct().getId())
-                .orElseThrow(
-                        () -> new ResourceNotFoundException("Product not found with id: " + item.getProduct().getId()));
-
-        // Check if enough stock is available
-        if (product.getStockQuantity() < item.getQuantity()) {
-            throw new InsufficientStockException("Not enough stock for product: " + product.getName());
+    
+        // Loop through each billed item in the list
+        for (BilledItem item : items) {
+            // Fetch product by ID for each item
+            Product product = productRepository.findById(item.getProduct().getId())
+                    .orElseThrow(
+                            () -> new ResourceNotFoundException("Product not found with id: " + item.getProduct().getId()));
+    
+            // Check if the product has enough stock
+            if (product.getStockQuantity() < item.getQuantity()) {
+                throw new InsufficientStockException("Not enough stock for product: " + product.getName());
+            }
+    
+            // Deduct stock quantity from the product
+            product.setStockQuantity(product.getStockQuantity() - item.getQuantity());
+            productRepository.save(product);  // Save the updated product stock
+    
+            // Set the bill for the current item
+            item.setBill(bill);
+            // Add the item to the bill's list of billed items
+            bill.getBilledItems().add(item);
         }
-
-        // Deduct stock quantity
-        product.setStockQuantity(product.getStockQuantity() - item.getQuantity());
-        productRepository.save(product);
-
-        item.setBill(bill); // Associate item with bill
-        bill.getBilledItems().add(item);
+    
+        // Save and return the updated bill
         return billRepository.save(bill);
     }
+    
 
     public Bill parkBill(Long billId) {
         Bill bill = billRepository.findById(billId)

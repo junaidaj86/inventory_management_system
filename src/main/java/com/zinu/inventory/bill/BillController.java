@@ -21,8 +21,8 @@ public class BillController {
     }
 
     @PostMapping("/{billId}/add-item")
-    public ResponseEntity<Bill> addItemToBill(@PathVariable Long billId, @RequestBody BilledItem item) {
-        Bill updatedBill = billService.addItemToBill(billId, item);
+    public ResponseEntity<Bill> addItemToBill(@PathVariable Long billId, @RequestBody List<BilledItem> items) {
+        Bill updatedBill = billService.addItemsToBill(billId, items);
         return ResponseEntity.ok(updatedBill);
     }
 
