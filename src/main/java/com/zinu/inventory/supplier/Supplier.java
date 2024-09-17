@@ -1,7 +1,10 @@
 package com.zinu.inventory.supplier;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.zinu.inventory.store.Address;
+import com.zinu.inventory.store.Store;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -21,5 +24,11 @@ public class Supplier {
     private Address address;
 
     private Long tenantId;
+
+    // Link supplier to a store (tenant)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
+    @JsonManagedReference
+    private Store store;
 }
 

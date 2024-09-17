@@ -3,6 +3,7 @@ package com.zinu.inventory.store;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,11 @@ public class StoreServiceImpl implements StoreService{
 
     @PostMapping
     public Store createStore(@RequestBody Store store) {
-        return storeRepository.save(store);
+        try {
+            return storeRepository.save(store);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityViolationException("Store with the same register number already exists.");
+        }
     }
 
     @GetMapping

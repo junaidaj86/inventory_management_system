@@ -9,5 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface BillRepository extends JpaRepository<Bill, Long> {
     
     List<Bill> findByIsParked(boolean isParked);
+    List<Bill> findByStoreId(Long storeId);
 }
 

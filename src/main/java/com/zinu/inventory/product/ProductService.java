@@ -1,16 +1,13 @@
 package com.zinu.inventory.product;
 
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.google.zxing.common.BitMatrix;
 import com.zinu.inventory.category.Category;
 import com.zinu.inventory.category.CategoryRepository;
 import com.zinu.inventory.configuration.TenantedAuthenticationToken;
@@ -28,62 +25,111 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final BarcodeRepository barcodeRepository;
 
+    // Get the current tenant ID from authentication
     private Long getTenantId() {
         TenantedAuthenticationToken authentication = (TenantedAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         return authentication.getTenantId();
     }
 
+    // Create a new product
     public ProductDTO createProduct(Product product, Long supplierId, Long categoryId) {
-        Long tenantId = getTenantId();
-       
+        Long tenantId = getTenantId();  // Get tenantId from the current user
 
         Supplier supplier = supplierRepository.findById(supplierId)
                 .orElseThrow(() -> new RuntimeException("Supplier not found"));
 
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
-
         if (!supplier.getTenantId().equals(tenantId)) {
             throw new RuntimeException("Supplier does not belong to the current tenant");
         }
+
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        if (!category.getStore().getId().equals(tenantId)) {
+            throw new RuntimeException("Category does not belong to the current tenant's store");
+        }
+
         product.setCategory(category);
         product.setTenantId(tenantId);
         product.setSupplier(supplier);
 
-        // Generate a unique barcode using the product name
+        // Generate a unique barcode
         String barcodeText = UUID.randomUUID().toString();
-        //String barcodeImagePath = barcodeService.generateBarcode(barcodeText);
-
-        // Save the barcode details in the Barcode entity
         Barcode barcode = new Barcode();
         barcode.setCode(barcodeText);
-        //barcode.setImagePath(barcodeImagePath);
-        product.setBarcode(barcode); 
-        Product prod = productRepository.save(product);
-        return new ProductDTO(product);
-        
+        barcode.setTenantId(tenantId.toString());  // Link barcode to tenant
+        product.setBarcode(barcode);  // Link barcode to the product
+
+        Product savedProduct = productRepository.save(product);
+        return new ProductDTO(savedProduct);
     }
 
+    // Update an existing product
+    public ProductDTO updateProduct(Long productId, Product productDetails, Long supplierId, Long categoryId) {
+        Long tenantId = getTenantId();
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        Supplier supplier = supplierRepository.findById(supplierId)
+                .orElseThrow(() -> new RuntimeException("Supplier not found"));
+
+        if (!supplier.getTenantId().equals(tenantId)) {
+            throw new RuntimeException("Supplier does not belong to the current tenant");
+        }
+
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        if (!category.getStore().getId().equals(tenantId)) {
+            throw new RuntimeException("Category does not belong to the current tenant's store");
+        }
+
+        product.setName(productDetails.getName());
+        product.setDescription(productDetails.getDescription());
+        product.setPrice(productDetails.getPrice());
+        product.setStockQuantity(productDetails.getStockQuantity());
+        product.setSupplier(supplier);
+        product.setCategory(category);
+
+        Product updatedProduct = productRepository.save(product);
+        return new ProductDTO(updatedProduct);
+    }
+
+    // Delete a product
+    public void deleteProduct(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        productRepository.delete(product);
+    }
+
+    // Find product by barcode and tenantId
     public Product findProductByBarcodeAndTenant(String barcodeText) {
-        // Find the Barcode entity by the barcode code
         Barcode barcode = barcodeRepository.findByCode(barcodeText)
                 .orElseThrow(() -> new IllegalArgumentException("Barcode not found"));
 
-        // Find the Product by Barcode and tenantId
         return productRepository.findByBarcodeAndTenantId(barcode, getTenantId())
                 .orElseThrow(() -> new IllegalArgumentException("Product not found for the given barcode and tenant"));
     }
 
-    // public String generateBarcode(String barcodeText) throws Exception {
-    //     private static final String BARCODE_DIRECTORY = "barcodes/";
-    //     BitMatrix bitMatrix = new MultiFormatWriter().encode(barcodeText, BarcodeFormat.CODE_128, 300, 150);
-    //     String barcodeFileName = BARCODE_DIRECTORY + barcodeText + ".png";
-    //     Path path = Paths.get(barcodeFileName);
-    //     MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
-    //     return barcodeFileName; // Return the path to the barcode image
-    // }
-
+    // Search for products by name
     public List<Product> searchProductByName(String name) {
         return productRepository.findByNameContainingIgnoreCase(name);
+    }
+
+    // Get paginated list of products for the tenant
+    public Page<Product> getProductsPaginated(int page, int size) {
+        return productRepository.findByTenantId(getTenantId(), PageRequest.of(page, size));
+    }
+
+    // Update stock level for a product
+    public ProductDTO updateStock(Long productId, int stockChange) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        product.setStockQuantity(product.getStockQuantity() + stockChange);  // Adjust stock quantity
+
+        Product updatedProduct = productRepository.save(product);
+        return new ProductDTO(updatedProduct);
     }
 }

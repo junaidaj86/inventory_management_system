@@ -19,14 +19,14 @@ public class SupplierController {
     private final SupplierService supplierService;
 
     @PostMapping
-    public ResponseEntity<Supplier> createSupplier(@RequestBody Supplier supplier) {
-        Supplier createdSupplier = supplierService.createSupplier(supplier);
+    public ResponseEntity<SupplierDTO> createSupplier(@RequestBody Supplier supplier) {
+        SupplierDTO createdSupplier = supplierService.createSupplier(supplier);
         return ResponseEntity.ok(createdSupplier);
     }
 
     @GetMapping
-    public ResponseEntity<List<Supplier>> getSupplier() {
-        List<Supplier> createdSupplier = supplierService.getSupplier();
+    public ResponseEntity<List<SupplierDTO>> getSupplier() {
+        List<SupplierDTO> createdSupplier = supplierService.getSupplier();
         return ResponseEntity.ok(createdSupplier);
     }
 }

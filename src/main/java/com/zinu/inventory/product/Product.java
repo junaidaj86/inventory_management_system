@@ -3,6 +3,7 @@ package com.zinu.inventory.product;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zinu.inventory.category.Category;
+import com.zinu.inventory.store.Store;
 import com.zinu.inventory.supplier.Supplier;
 
 import jakarta.persistence.*;
@@ -22,6 +23,12 @@ public class Product {
 
     private Long tenantId;
 
+    // Link product to a store (tenant)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
+    @JsonIgnore
+    private Store store;
+
     @Column(nullable = false)
     private double price;
 
@@ -40,7 +47,7 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    @JsonBackReference
+    @JsonIgnore
     private Category category;
 
 }
