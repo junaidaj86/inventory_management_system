@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.zinu.inventory.authentication.Users;
+import com.zinu.inventory.common.BaseEntity;
 import com.zinu.inventory.product.Product;
 import com.zinu.inventory.supplier.Supplier;
 
@@ -18,10 +19,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-public class Store {
+@EqualsAndHashCode(callSuper = true)
+public class Store extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy =GenerationType.IDENTITY)
@@ -38,14 +41,17 @@ public class Store {
     private Address address;
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Users> users;
 
     // One store can have many products
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Product> products;
 
     // One store can have many suppliers
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Supplier> suppliers;
 
 }

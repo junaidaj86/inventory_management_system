@@ -3,15 +3,18 @@ package com.zinu.inventory.product;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zinu.inventory.category.Category;
+import com.zinu.inventory.common.BaseEntity;
 import com.zinu.inventory.store.Store;
 import com.zinu.inventory.supplier.Supplier;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-public class Product {
+@EqualsAndHashCode(callSuper = true)
+public class Product extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,11 +29,14 @@ public class Product {
     // Link product to a store (tenant)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
-    @JsonIgnore
+    @JsonBackReference
     private Store store;
 
     @Column(nullable = false)
     private double price;
+
+    @Column(nullable = true)
+    private double sellingPrice;
 
     @Column(nullable = false)
     private int stockQuantity;

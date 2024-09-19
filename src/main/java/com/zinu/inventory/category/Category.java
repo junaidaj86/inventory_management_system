@@ -2,17 +2,19 @@ package com.zinu.inventory.category;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.zinu.inventory.common.BaseEntity;
 import com.zinu.inventory.product.Product;
 import com.zinu.inventory.store.Store;
 
 @Entity
 @Data
-public class Category {
+@EqualsAndHashCode(callSuper = true)
+public class Category extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

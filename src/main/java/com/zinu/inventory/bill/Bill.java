@@ -3,7 +3,7 @@ package com.zinu.inventory.bill;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.zinu.inventory.product.Product;
+import com.zinu.inventory.common.BaseEntity;
 import com.zinu.inventory.store.Store;
 
 import jakarta.persistence.CascadeType;
@@ -16,10 +16,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Data
-public class Bill {
+@EqualsAndHashCode(callSuper = true)
+public class Bill extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -33,8 +33,8 @@ public class SupplierService {
         Store store = storeRepository.findById(tenantId)
                 .orElseThrow(() -> new RuntimeException("Store not found for tenantId: " + tenantId));
         supplier.setStore(store);
-        
-        return new SupplierDTO(supplier);
+        Supplier resultSupplier = supplierRepository.save(supplier);
+        return new SupplierDTO(resultSupplier);
     }
 
     public List<SupplierDTO> getSupplier() {

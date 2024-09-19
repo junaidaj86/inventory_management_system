@@ -17,7 +17,7 @@ public class ProductDTO {
         this.id = product.getId();
         this.name = product.getName();
         this.description = product.getDescription();
-        this.price = product.getPrice();
+        this.price = product.getSellingPrice();
         this.stockQuantity = product.getStockQuantity();
         this.barcode = product.getBarcode().getCode();
         this.categoryId = product.getCategory().getId();

@@ -1,13 +1,16 @@
 package com.zinu.inventory.bill;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.zinu.inventory.common.BaseEntity;
 import com.zinu.inventory.product.Product;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Data
-public class BilledItem {
+@EqualsAndHashCode(callSuper = true)
+public class BilledItem extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

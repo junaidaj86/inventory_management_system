@@ -8,10 +8,10 @@ import lombok.Data;
 @Embeddable
 public class Address {
 
-    @Column(length = 10)
+    @Column(length = 100)
     private String buildingNumber;
 
-    @Column(length = 10)
+    @Column(length = 100)
     private String shopNumber;
 
     @Column(length = 100)
