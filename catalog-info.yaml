@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Service
+metadata:
+  name: inventory
+  description: A description of your account management repository.
+  annotations:
+    backstage.io/kubernetes-id: inventory
+spec:
+  type: service
+  lifecycle: production
+  owner: junaidaj86
