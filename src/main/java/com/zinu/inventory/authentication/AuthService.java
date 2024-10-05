@@ -49,8 +49,11 @@ public class AuthService {
                 var user = repository.findByEmail(request.getEmail())
                                 .orElseThrow();
                 var jwtToken = jwtService.generateToken(user, Long.valueOf(user.getTenantId()));
+                //set password as some random string before sending the response
+                user.setPassword("*****");
                 return AuthResponse.builder()
                                 .token(jwtToken)
+                                .user(user)
                                 .build();
         }
 }

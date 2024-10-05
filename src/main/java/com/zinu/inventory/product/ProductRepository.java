@@ -48,4 +48,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT DATE_TRUNC('month', p.createdDate), SUM(p.price * p.stockQuantity) FROM Product p WHERE p.createdDate BETWEEN :startDate AND :endDate GROUP BY DATE_TRUNC('month', p.createdDate)")
     List<Object[]> sumPurchaseAmountByMonthInRange(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
+    @Query("SELECT p.id, p.name FROM Product p WHERE p.stockQuantity = 0")
+    List<Object[]> findOutOfStockProducts();
 }
