@@ -21,7 +21,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+        http.cors(cors -> {})
             // Disable CSRF since we're using JWTs
             .csrf(csrf -> csrf.disable())
             // Configure frame options to allow H2 console (development only)
